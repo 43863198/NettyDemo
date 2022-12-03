@@ -11,6 +11,15 @@ import java.util.Set;
  * @description: NIO服务端
  * @author: zzm
  * @create: 2020-08-15 23:22
+ *
+ * nio select 有1024个fd（也就是只有1024个最多连接） 文件描述符限制 poll 跟系统设置有关
+ *     优势： 通过一次select把fd传给内核，内核进行遍历，减少了系统调用的次数
+ *     劣势：（1）：重复传递fd 解决方案：内核开辟内存空间保留fd
+ *          （2）：每次select poll 都要全量遍历全量的fd
+ *     epoll epoll creat -》 epoll_ctl-> epoll wait(阻塞，其实相当于多路复用里的select)
+ *     epoll creat -》 epoll_ctl-> 去创建内核空间，去add 文件文件描述符到当前socket返回的文件描述符
+ *     nigx也是多路服用 redis是带着超时的select（timeout）因为他是单线程、
+ *     -- cmd  strace -ff -o out java NioServer
  */
 public class NioServer {
     public static void main(String[] args) throws Exception {

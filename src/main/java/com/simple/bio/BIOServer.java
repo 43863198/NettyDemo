@@ -10,6 +10,13 @@ import java.util.concurrent.*;
  * @description: BIO Server
  * @author: zhaozhiming
  * @create: 2020-06-07 00:16
+ * bio 每个连接对应一个线程，线程也是占用内存空间，差不多1m,加上好多客户端连接浪费内存和cpu的来回切换，浪费资源，所以引出nio
+ * bio 优势 可以接受很多连接 .问题 : (1) 线程内存的浪费 cpu调度的消耗.
+ *
+ *
+ * nio read不阻塞了,但是不精准(因为可能没有都到数据)，做到了一个线程读取多个连接,所以要循环读多个socket 判断有数据就能读到
+ *
+ *
  */
 public class BIOServer {
 
@@ -18,11 +25,12 @@ public class BIOServer {
         final ExecutorService pool = new ThreadPoolExecutor(5, 10,
                 60L, TimeUnit.MILLISECONDS,
                 new SynchronousQueue<Runnable>(false), Executors.defaultThreadFactory(), new ThreadPoolExecutor.AbortPolicy());
-
+        //socket >=3 -> bind(3,7777) -> listen(3) -> accept(3, ) -> receive(3,)
         ServerSocket serverSocket = new ServerSocket(7777);
         System.out.println("server启动了");
         System.out.println("线程id= " + Thread.currentThread().getId() + "线程name=" + Thread.currentThread().getName());
         while (true){
+            //System.in.read();
             final Socket socket = serverSocket.accept();
             System.out.println("接受到一个客户端");
             System.out.println("线程id= " + Thread.currentThread().getId() + "线程name=" + Thread.currentThread().getName());
