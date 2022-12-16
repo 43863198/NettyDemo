@@ -27,6 +27,7 @@ public class BIOServer {
                 new SynchronousQueue<Runnable>(false), Executors.defaultThreadFactory(), new ThreadPoolExecutor.AbortPolicy());
         //socket >=3 -> bind(3,7777) -> listen(3) -> accept(3, ) -> receive(3,)
         ServerSocket serverSocket = new ServerSocket(7777);
+        //serverSocket.setSoTimeout(300); 不用于netty和nio中，用于阻塞io的超时时间
         System.out.println("server启动了");
         System.out.println("线程id= " + Thread.currentThread().getId() + "线程name=" + Thread.currentThread().getName());
         while (true){
