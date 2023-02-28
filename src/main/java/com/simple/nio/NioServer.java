@@ -23,6 +23,7 @@ import java.util.Set;
  */
 public class NioServer {
     public static void main(String[] args) throws Exception {
+        //ByteBuffer.allocateDirect() 开启这条命令直接在堆外内存开辟了一块空间
         //创建一个serverSocketChannel
         ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
         //绑定端口
